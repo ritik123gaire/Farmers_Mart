@@ -47,9 +47,11 @@ class _ProductsPageState extends State<ProductsPage>
     ),
   ];
 
+  List<Product> filteredProducts = [];
   Map<Product, int> cart = {};
   late AnimationController _animationController;
   late Animation<double> _animation;
+  String searchQuery = '';
 
   @override
   void initState() {
@@ -61,6 +63,7 @@ class _ProductsPageState extends State<ProductsPage>
     _animation = Tween<double>(begin: 1.0, end: 1.5).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
+    filteredProducts = products; // Initially display all products
   }
 
   @override
@@ -157,12 +160,15 @@ class _ProductsPageState extends State<ProductsPage>
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      StripeService.instance.makePayment(context, totalPrice);
-                    },
+                    onPressed: cart.isEmpty
+                        ? null
+                        : () {
+                            Navigator.pop(context);
+                            StripeService.instance
+                                .makePayment(context, totalPrice);
+                          },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: cart.isEmpty ? Colors.grey : Colors.red,
                       minimumSize: const Size(double.infinity, 50),
                     ),
                     child: const Text('Proceed to Checkout'),
@@ -192,6 +198,20 @@ class _ProductsPageState extends State<ProductsPage>
         builder: (context) => BillReceiptPage(products: cartItems),
       ),
     );
+  }
+
+  void _searchProducts(String query) {
+    setState(() {
+      searchQuery = query;
+      if (searchQuery.isEmpty) {
+        filteredProducts = products;
+      } else {
+        filteredProducts = products
+            .where((product) =>
+                product.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
   }
 
   @override
@@ -246,15 +266,41 @@ class _ProductsPageState extends State<ProductsPage>
       ),
       body: Column(
         children: [
+          // Banner image added below the search bar
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
+              onChanged: _searchProducts,
               decoration: InputDecoration(
-                hintText: 'Search',
+                filled: true,
+                fillColor: Colors.white, // Set background to white
+                hintText: 'Search for products...',
                 suffixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+              ),
+            ),
+          ),
+          // Banner image
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.network(
+              'https://img.freepik.com/free-vector/flat-design-grocery-store-sale-banner_23-2151070112.jpg?w=996&t=st=1726310270~exp=1726310870~hmac=c607de52d8da4b7672d84f9838b651d39b1a121ad8e3c0e6d7c844ecd2a18c7f',
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Display "Products" title
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Products',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
             ),
           ),
@@ -267,9 +313,9 @@ class _ProductsPageState extends State<ProductsPage>
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
               ),
-              itemCount: products.length,
+              itemCount: filteredProducts.length,
               itemBuilder: (context, index) {
-                final product = products[index];
+                final product = filteredProducts[index];
                 return Card(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
