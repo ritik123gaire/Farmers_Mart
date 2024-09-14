@@ -66,7 +66,6 @@ class FarmersMartApp extends StatelessWidget {
         '/signup': (context) => const SignUpPage(),
         '/profile': (context) => const ProfilePage(),
         '/products': (context) => const ProductsPage(),
-        // '/cart': (context) => const CartPage(),
         '/paymentSuccess': (context) =>
             const PaymentSuccessfulPage(amount: 0.0),
         '/billing': (context) => const BillReceiptPage(
