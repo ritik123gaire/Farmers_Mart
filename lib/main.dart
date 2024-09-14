@@ -1,5 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'package:farmers_mart/screens/bill_receipt_page.dart';
+import 'package:farmers_mart/screens/payment_successful_page.dart';
 import 'package:flutter/material.dart';
 import 'screens/loading_page.dart';
 import 'screens/login_page.dart';
@@ -65,6 +67,10 @@ class FarmersMartApp extends StatelessWidget {
         '/profile': (context) => const ProfilePage(),
         '/products': (context) => const ProductsPage(),
         '/cart': (context) => const CartPage(),
+        '/paymentSuccess': (context) => const PaymentSuccessfulPage(),
+        '/billing': (context) => const BillReceiptPage(
+              products: [],
+            ),
       },
       debugShowCheckedModeBanner: false,
     );
