@@ -62,7 +62,7 @@ class FarmersMartApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignUpPage(),
         '/profile': (context) => const ProfilePage(),
-        '/products': (context) => ProductsPage(),
+        '/products': (context) => const ProductsPage(),
       },
       debugShowCheckedModeBanner: false,
     );
