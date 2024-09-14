@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'cart_item.dart';
+import 'bill_receipt_page.dart';
+import '../services/stripe_service.dart';
 
 class Product {
   final String name;
@@ -155,8 +158,8 @@ class _ProductsPageState extends State<ProductsPage>
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Implement checkout functionality
                       Navigator.pop(context);
+                      StripeService.instance.makePayment(context, totalPrice);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
@@ -170,6 +173,24 @@ class _ProductsPageState extends State<ProductsPage>
           },
         );
       },
+    );
+  }
+
+  void _proceedToCheckout() {
+    List<CartItem> cartItems = cart.entries.map((entry) {
+      return CartItem(
+        name: entry.key.name,
+        price: entry.key.price,
+        image: entry.key.image,
+        quantity: entry.value,
+      );
+    }).toList();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BillReceiptPage(products: cartItems),
+      ),
     );
   }
 

@@ -1,15 +1,14 @@
+import 'package:farmers_mart/screens/cart_item.dart';
 import 'package:flutter/material.dart';
 import '../services/stripe_service.dart';
-import 'cart_page.dart'; // Import CartItem class
 
 class BillReceiptPage extends StatelessWidget {
-  final List<CartItem> products; // Use CartItem instead of Product
+  final List<CartItem> products;
 
   const BillReceiptPage({Key? key, required this.products}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Calculate total price based on price * quantity
     double total =
         products.fold(0, (sum, item) => sum + item.price * item.quantity);
 
@@ -27,80 +26,70 @@ class BillReceiptPage extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-
-            // Add table headers
-            Table(
-              columnWidths: const {
-                0: FlexColumnWidth(1), // Serial number
-                1: FlexColumnWidth(3), // Item name
-                2: FlexColumnWidth(1), // Quantity
-                3: FlexColumnWidth(2), // Price
-                4: FlexColumnWidth(2), // Total
-              },
-              children: [
-                // Table headers
-                TableRow(
+            Expanded(
+              child: SingleChildScrollView(
+                child: Table(
+                  columnWidths: const {
+                    0: FlexColumnWidth(1),
+                    1: FlexColumnWidth(3),
+                    2: FlexColumnWidth(1),
+                    3: FlexColumnWidth(2),
+                    4: FlexColumnWidth(2),
+                  },
+                  border: TableBorder.all(color: Colors.grey.shade300),
                   children: [
-                    tableHeaderCell('SN'),
-                    tableHeaderCell('Item'),
-                    tableHeaderCell('Qty'),
-                    tableHeaderCell('Price'),
-                    tableHeaderCell('Total'),
+                    TableRow(
+                      decoration: BoxDecoration(color: Colors.grey.shade200),
+                      children: [
+                        tableHeaderCell('SN'),
+                        tableHeaderCell('Item'),
+                        tableHeaderCell('Qty'),
+                        tableHeaderCell('Price'),
+                        tableHeaderCell('Total'),
+                      ],
+                    ),
+                    ...products.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      CartItem product = entry.value;
+                      return TableRow(
+                        children: [
+                          tableCell((index + 1).toString()),
+                          tableCell(product.name),
+                          tableCell(product.quantity.toString()),
+                          tableCell('\$${product.price.toStringAsFixed(2)}'),
+                          tableCell(
+                              '\$${(product.price * product.quantity).toStringAsFixed(2)}'),
+                        ],
+                      );
+                    }).toList(),
                   ],
                 ),
-              ],
-            ),
-
-            const SizedBox(height: 10),
-
-            // Generate table rows dynamically for each product
-            Expanded(
-              child: ListView.builder(
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return Table(
-                    columnWidths: const {
-                      0: FlexColumnWidth(1), // Serial number
-                      1: FlexColumnWidth(3), // Item name
-                      2: FlexColumnWidth(1), // Quantity
-                      3: FlexColumnWidth(2), // Price
-                      4: FlexColumnWidth(2), // Total
-                    },
-                    children: [
-                      TableRow(
-                        children: [
-                          tableCell((index + 1).toString()), // Serial number
-                          tableCell(product.name), // Item name
-                          tableCell(product.quantity.toString()), // Quantity
-                          tableCell(
-                              '\$${product.price.toStringAsFixed(2)}'), // Price
-                          tableCell(
-                              '\$${(product.price * product.quantity).toStringAsFixed(2)}'), // Total
-                        ],
-                      ),
-                    ],
-                  );
-                },
               ),
             ),
             const SizedBox(height: 20),
-            // Display total amount
             Text(
               'Grand Total: \$${total.toStringAsFixed(2)}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            // Proceed to Pay button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context); // Go back to the previous screen
-                  StripeService.instance
-                      .makePayment(context); // Call your payment modal
+                  Navigator.pop(context);
+                  StripeService.instance.makePayment(context, total);
                 },
-                child: const Text('Proceed to Pay'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'Proceed to Pay',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             ),
           ],
@@ -109,26 +98,24 @@ class BillReceiptPage extends StatelessWidget {
     );
   }
 
-  // Helper function for generating table cells
   Widget tableCell(String text) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4.0),
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 16),
+        style: const TextStyle(fontSize: 14),
       ),
     );
   }
 
-  // Helper function for generating header cells
   Widget tableHeaderCell(String text) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4.0),
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
       ),
     );
   }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class PaymentSuccessfulPage extends StatelessWidget {
-  const PaymentSuccessfulPage({Key? key}) : super(key: key);
+  final double amount;
+
+  const PaymentSuccessfulPage({Key? key, required this.amount})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +30,9 @@ class PaymentSuccessfulPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
-                'Payment done successfully',
-                style: TextStyle(fontSize: 18),
+              Text(
+                'Payment of \$${amount.toStringAsFixed(2)} done successfully',
+                style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 20),
               const Text(

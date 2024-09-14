@@ -8,7 +8,7 @@ import 'screens/login_page.dart';
 import 'screens/signup_page.dart';
 import 'screens/profile_page.dart';
 import 'screens/products_page.dart';
-import 'screens/cart_page.dart';
+// import 'screens/cart_page.dart';
 
 void main() {
   runApp(FarmersMartApp());
@@ -66,8 +66,9 @@ class FarmersMartApp extends StatelessWidget {
         '/signup': (context) => const SignUpPage(),
         '/profile': (context) => const ProfilePage(),
         '/products': (context) => const ProductsPage(),
-        '/cart': (context) => const CartPage(),
-        '/paymentSuccess': (context) => const PaymentSuccessfulPage(),
+        // '/cart': (context) => const CartPage(),
+        '/paymentSuccess': (context) =>
+            const PaymentSuccessfulPage(amount: 0.0),
         '/billing': (context) => const BillReceiptPage(
               products: [],
             ),
