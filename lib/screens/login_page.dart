@@ -38,71 +38,73 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  'Welcome to Farmer\'s Mart',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Login or Sign up to access your account',
-                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 32),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Contact Number',
-                    prefixIcon: Icon(Icons.phone),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'Welcome to Farmer\'s Mart',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  keyboardType: TextInputType.phone,
-                  validator: (value) => value!.isEmpty
-                      ? 'Please enter your contact number'
-                      : null,
-                  onSaved: (value) => _contact = value!,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Login or Sign up to access your account',
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                   ),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter your password' : null,
-                  onSaved: (value) => _password = value!,
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _login,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.green,
+                  const SizedBox(height: 32),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Contact Number',
+                      prefixIcon: Icon(Icons.phone),
+                    ),
+                    keyboardType: TextInputType.phone,
+                    validator: (value) => value!.isEmpty
+                        ? 'Please enter your contact number'
+                        : null,
+                    onSaved: (value) => _contact = value!,
                   ),
-                  child: const Text('Login'),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _socialButton('Google', Icons.g_mobiledata),
-                    _socialButton('Apple', Icons.apple),
-                    _socialButton('Facebook', Icons.facebook),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  child: const Text('Don\'t have an account? Sign Up'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/signup');
-                  },
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter your password' : null,
+                    onSaved: (value) => _password = value!,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: _login,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Colors.green,
+                    ),
+                    child: const Text('Login'),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _socialButton('Google', Icons.g_mobiledata),
+                      _socialButton('Apple', Icons.apple),
+                      _socialButton('Facebook', Icons.facebook),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    child: const Text('Don\'t have an account? Sign Up'),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/signup');
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
